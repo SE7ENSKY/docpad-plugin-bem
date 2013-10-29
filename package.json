@@ -1,0 +1,29 @@
+{
+    "name": "docpad-plugin-bem",
+    "version": "2.0.0",
+    "description": "DocPad plugin for BEM. Project is in incubating status.",
+    "keywords": [
+        "docpad",
+        "docpad-plugin",
+        "bem"
+    ],
+    "author": "Se7enSky studio <info@se7ensky.com> (http://www.se7ensky.com) (http://github.com/Se7enSky)",
+    "maintainers": [
+        "Ivan Kravchenko <i@se7ensky.com> (http://github.com/krava)"
+    ],
+    "homepage": "https://github.com/Se7enSky/docpad-plugin-bem",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Se7enSky/docpad-plugin-bem.git"
+    },
+    "engines" : {
+        "node": ">=0.8"
+    },
+    "dependencies": {
+        "async": "~0.2.9"
+    },
+    "peerDependencies": {
+        "docpad": "6"
+    },
+    "main": "./src/bem.plugin.coffee"
+}
