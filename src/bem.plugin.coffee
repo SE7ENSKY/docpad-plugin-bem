@@ -7,6 +7,8 @@ module.exports = (BasePlugin) ->
 		config:
 			blocksPaths: [ 'blocks' ]
 
+		alreadyAddedAssets: []
+
 		populateCollections: (opts,next) ->
 			docpadConfig = @docpad.getConfig()
 			config = docpadConfig.plugins.bem
@@ -47,6 +49,8 @@ module.exports = (BasePlugin) ->
 			cssAssets = []
 			jsAssets = []
 			for asset in allBemAssets
+				continue if asset.url in @alreadyAddedAssets
+				@alreadyAddedAssets.push asset.url
 				cssAssets.push asset.url if asset.outExtension is 'css'
 				jsAssets.push asset.url if asset.outExtension is 'js'
 			@docpad.getBlock('styles').add cssAssets
