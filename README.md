@@ -25,13 +25,100 @@ Project is in incubating status.
 docpad install bem
 ```
 
-## Example
-To be written.
+## Examples
+Directory structure
+```
+src/
+|- documents/
+|  |- index.html.jade
+|  ...
+|- blocks/
+|  |- menu/
+|  |  |- menu.html.jade
+|  |  |- menu.css.styl
+|  |- copyright/
+|  |  |- copyright.html.jade
+|  ...
+|- docpad.coffee
+```
+
+File docpad.coffee:
+```coffee
+...
+  templateData:
+    mainMenuItems: [ # define our main menu items as an array of objects with title and href fields
+      { title: "Home", href: "/" }
+      { title: "About", href: "/about" }
+      { title: "Contact", href: "/contact" }
+    ]
+    footerMenuItems: [
+      { title: "Terms and conditions" }
+    ]
+    copyright:
+      name: "Example project"
+      
+...
+```
+
+File src/documents/index.html.jade:
+```jade
+---
+title: Document title here
+---
+
+!!! 5
+html
+  head
+    meta(charset="utf8")
+    != getBlock("meta").toHTML()
+    title= document.title
+    != getBlock("styles").toHTML()
+  body
+    header
+      != block("menu", { items: mainMenuItems })
+      
+    main
+      h1= document.title
+    
+    footer
+      != block("menu", { items: footerMenuItems })
+      != block("copyright", { copyright: copyright })
+    
+    != getBlock("scripts").toHTML()
+```
+
+File src/blocks/menu/menu.html.jade
+```jade
+ul.menu__list
+  each item in items
+    li.menu__item
+      a.menu__item-link(href=item.href, title=item.title)= item.title
+```
+
+File src/blocks/menu/menu.css.styl
+```styl
+.menu
+  &__list
+    list-style none
+  &__item
+    list-style none
+    float left
+    margin 0 10px
+  &__item-link
+    color blue
+    &:hover
+      color blue
+```
+
+File src/blocks/copyright/copyright.html.jade
+```jade
+p &copy; #{copyright.name}
+```
 
 ## Authors
  - [Se7enSky studio](http://www.se7ensky.com/)
- - Ivan Kravchenko @krava
- - Roma @romavab
+ - [Ivan Kravchenko](http://github.com/krava)
+ - [Roma Vabishchevych](http://github.com/romavab)
 
 ## License
 
