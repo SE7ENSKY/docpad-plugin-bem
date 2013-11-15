@@ -28,6 +28,7 @@ module.exports = (BasePlugin) ->
 						@renderedBlocks[blockPlaceholder] = result
 
 		block: (blockName, data = {}) =>
+			@referencesOthers?()
 			# ToDo: do escapes
 
 			tag = data.tag or "div"
@@ -54,7 +55,10 @@ module.exports = (BasePlugin) ->
 			"<#{tag} #{attrs}>#{blockPlaceholder}</#{tag}>"
 
 		extendTemplateData: ({templateData}) ->
-			templateData.block = @block
+			self = @
+			templateData.block = (args...) ->
+				@referencesOthers?()
+				self.block args...
 			@ # chaining
 
 		renderDocument: (opts, next) ->
