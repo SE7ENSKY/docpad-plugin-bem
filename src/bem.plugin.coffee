@@ -17,6 +17,7 @@ module.exports = (BasePlugin) ->
 			if not blockDocument
 				@renderedBlocks[blockPlaceholder] = "[block not found: #{blockName}]"
 			else
+				templateData.block = @block
 				@docpad.renderDocument blockDocument, templateData: templateData, (err, result, document) =>
 					if err
 						@renderedBlocks[blockPlaceholder] = "[error rendering block: #{blockName}]"
@@ -26,32 +27,34 @@ module.exports = (BasePlugin) ->
 						# console.log "successfully rendered block #{blockName}"
 						@renderedBlocks[blockPlaceholder] = result
 
+		block: (blockName, data = {}) =>
+			# ToDo: do escapes
+
+			tag = data.tag or "div"
+			
+			classes = [blockName]
+			
+			if data.mods
+				classes.push "#{blockName}_#{key}_#{value}" for key, value of data.mods
+				delete data.mods
+
+			if data.class
+				classes.push data.class
+				delete data.class
+
+			attrs = "class=\"#{classes.join ' '}\""
+			if data.attrs
+				attrs += " #{key}=\"#{value}\"" for key, value of data.attrs
+				delete data.attrs
+
+			blockPlaceholder = "[block:#{Math.random()}]"
+
+			@renderBlock blockName, data, blockPlaceholder
+
+			"<#{tag} #{attrs}>#{blockPlaceholder}</#{tag}>"
+
 		extendTemplateData: ({templateData}) ->
-			templateData.block = (blockName, data = {}) =>
-				# ToDo: do escapes
-
-				tag = data.tag or "div"
-				
-				classes = [blockName]
-				
-				if data.mods
-					classes.push "#{blockName}_#{key}_#{value}" for key, value of data.mods
-					delete data.mods
-
-				if data.class
-					classes.push data.class
-					delete data.class
-
-				attrs = "class=\"#{classes.join ' '}\""
-				if data.attrs
-					attrs += " #{key}=\"#{value}\"" for key, value of data.attrs
-					delete data.attrs
-
-				blockPlaceholder = "[block:#{Math.random()}]"
-
-				@renderBlock blockName, data, blockPlaceholder
-
-				"<#{tag} #{attrs}>#{blockPlaceholder}</#{tag}>"
+			templateData.block = @block
 			@ # chaining
 
 		renderDocument: (opts, next) ->
