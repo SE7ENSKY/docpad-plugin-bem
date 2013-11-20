@@ -1,6 +1,6 @@
 {
     "name": "docpad-plugin-bem",
-    "version": "2.2.2",
+    "version": "2.2.5",
     "description": "DocPad plugin for BEM. Project is in incubating status.",
     "keywords": [
         "docpad",

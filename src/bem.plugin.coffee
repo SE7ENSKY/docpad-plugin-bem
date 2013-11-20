@@ -6,6 +6,8 @@ module.exports = (BasePlugin) ->
 
 		config:
 			blocksPaths: [ 'blocks' ]
+			processCssAssets: on
+			processJsAssets: on
 
 		constructor: ->
 			super
@@ -96,26 +98,19 @@ module.exports = (BasePlugin) ->
 			@docpad.setCollection 'bemCssAssets', @docpad.getDatabase().createLiveChildCollection()
 				.setQuery('isBemCssAsset', isBemAsset: yes, outExtension: 'css')
 				.on("add", (model) =>
-					model.setDefaults
-						render: yes
-						write: yes
-					@docpad.getBlock('styles').add [ model.get('url') ]
+					if config.processCssAssets
+						model.set render: yes, write: yes
+						@docpad.getBlock('styles').add [ model.get('url') ]
 				)
 			@docpad.setCollection 'bemJsAssets', @docpad.getDatabase().createLiveChildCollection()
 				.setQuery('isBemJsAsset', isBemAsset: yes, outExtension: 'js')
 				.on("add", (model) =>
-					model.setDefaults
-						render: yes
-						write: yes
-					@docpad.getBlock('scripts').add [ model.get('url') ]
+					if config.processJsAssets
+						model.set render: yes, write: yes
+						@docpad.getBlock('scripts').add [ model.get('url') ]
 				)
 			@docpad.setCollection 'bemHtmlAssets', @docpad.getDatabase().createLiveChildCollection()
 				.setQuery('isBemHtmlAsset', isBemAsset: yes, outExtension: 'html')
-				.on("add", (model) =>
-					model.setDefaults
-						render: no
-						write: no
-				)
 
 			@docpad.setCollection 'bemAssets', @docpad.getDatabase().createLiveChildCollection()
 				.setQuery('isBemAsset',
@@ -124,6 +119,8 @@ module.exports = (BasePlugin) ->
 				.on('add', (model) =>
 					model.setDefaults
 						isBemAsset: yes
+						render: no
+						write: no
 					fullPath = model.get("fullPath")
 					for blocksPath in config.blocksPaths
 						if fullPath.indexOf "#{docpadConfig.srcPath}/#{blocksPath}/" is 0
