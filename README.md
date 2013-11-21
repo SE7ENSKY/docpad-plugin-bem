@@ -3,8 +3,6 @@ docpad-plugin-bem
 
 DocPad plugin intended to streamline development based [BEM](http://bem.info/) methodology.
 
-Project is in incubating status.
-
 ## Features
  - automatic blocks assets (js, css) including (into docpad's scripts and styles blocks)
  - livereload support (of course, with docpad-plugin-livereload)
